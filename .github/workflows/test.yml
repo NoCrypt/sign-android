@@ -1,0 +1,50 @@
+name: 'Test'
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - '**.yml'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test action
+
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout code
+
+      - name: Run tests
+        run: npm run test
+
+      - uses: pCYSl5EDgo/cat@1.0.1
+        name: Cat for GitHub Actions
+        id: get_key
+        with:
+          path: __tests__/test_key_b64.txt
+
+      - uses: ./
+        name: Sign APK
+        with:
+          releaseDir: __tests__/apk
+          signingKey: ${{ steps.get_key.outputs.text }}
+          keyAlias: test_key
+          keyStorePassword: android
+          keyPassword: android
+
+      - uses: ./
+        name: Sign AAB
+        with:
+          releaseDir: __tests__/aab
+          signingKey: ${{ steps.get_key.outputs.text }}
+          keyAlias: test_key
+          keyStorePassword: android
+          keyPassword: android
