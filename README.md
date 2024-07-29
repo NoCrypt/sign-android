@@ -9,7 +9,8 @@
 
 ---
 
-This action will help you sign an Android `.apk` or `.aab` (Android App Bundle) file for release.
+This action will help you sign an Android `.apk` or `.aab` (Android App Bundle)
+file for release.
 
 ## Usage
 
@@ -52,12 +53,12 @@ steps:
       separator: ':'
 
   - name: Example Release
-    uses: "marvinpinto/action-automatic-releases@latest"
+    uses: 'marvinpinto/action-automatic-releases@latest'
     with:
-      repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      automatic_release_tag: "latest"
+      repo_token: '${{ secrets.GITHUB_TOKEN }}'
+      automatic_release_tag: 'latest'
       prerelease: true
-      title: "Release X"
+      title: 'Release X'
       files: |
         ${{ steps.signed_files.outputs._0 }}
         ${{ steps.signed_files.outputs._1 }}
@@ -80,12 +81,12 @@ steps:
       keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
   - name: Example Release
-    uses: "marvinpinto/action-automatic-releases@latest"
+    uses: 'marvinpinto/action-automatic-releases@latest'
     with:
-      repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      automatic_release_tag: "latest"
+      repo_token: '${{ secrets.GITHUB_TOKEN }}'
+      automatic_release_tag: 'latest'
       prerelease: true
-      title: "Release X"
+      title: 'Release X'
       files: |
         ${{ steps.sign_app.outputs.signedFile0 }}
         ${{ steps.sign_app.outputs.signedFile1 }}
@@ -98,14 +99,14 @@ steps:
 
 You can set either inputs (in `with` section) or env (in `env` section).
 
-Key|ENV|Usage
--|-|-
-releaseDir|ANDROID_RELEASE_DIR|**Required.** The relative directory path in your project where your Android release file will be located.<br />Defaults to `app/build/outputs/apk/release`.
-signingKey|ANDROID_SIGNING_KEY|**Required.** The base64 encoded signing key used to sign your app.
-keyAlias|ANDROID_KEY_ALIAS|**Required.** The alias of your signing key.
-keyStorePassword|ANDROID_KEYSTORE_PASSWORD|**Required.** The password for your signing keystore.
-keyPassword|ANDROID_KEY_PASSWORD|**Optional.** The private password for your signing key.
-buildToolsVersion|ANDROID_BUILD_TOOLS_VERSION|**Optional.** The version of Android build tools to use. Defaults to Auto Detect.
+| Key               | ENV                         | Usage                                                                                                                                                        |
+| ----------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| releaseDir        | ANDROID_RELEASE_DIR         | **Required.** The relative directory path in your project where your Android release file will be located.<br />Defaults to `app/build/outputs/apk/release`. |
+| signingKey        | ANDROID_SIGNING_KEY         | **Required.** The base64 encoded signing key used to sign your app.                                                                                          |
+| keyAlias          | ANDROID_KEY_ALIAS           | **Required.** The alias of your signing key.                                                                                                                 |
+| keyStorePassword  | ANDROID_KEYSTORE_PASSWORD   | **Required.** The password for your signing keystore.                                                                                                        |
+| keyPassword       | ANDROID_KEY_PASSWORD        | **Optional.** The private password for your signing key.                                                                                                     |
+| buildToolsVersion | ANDROID_BUILD_TOOLS_VERSION | **Optional.** The version of Android build tools to use. Defaults to Auto Detect.                                                                            |
 
 You can prepare your `signingKey` by running this command:
 
@@ -113,17 +114,17 @@ You can prepare your `signingKey` by running this command:
 openssl base64 < some_signing_key.jks | tr -d '\n' | tee some_signing_key.jks.base64.txt
 ```
 
-Then copy the text to `Settings - Secrets - Action` in your account or organization.
+Then copy the text to `Settings - Secrets - Action` in your account or
+organization.
 
 ## Outputs
 
-Key|ENV|Usage
--|-|-
-signedFile|ANDROID_SIGNED_FILE|The path to the single release file that have been signed.<br />Not set if multiple release files have been signed.
-signedFiles|ANDROID_SIGNED_FILES|The paths to the release files that have been signed with this action, separated by `:`.
-signedFileX|ANDROID_SIGNED_FILE_X|The paths to the release files that have been signed with this action. The `X` is index number starting from 0. Example: `signedFile0, signedFile1` or `ANDROID_SIGNED_FILE_0`
-signedFilesCount|ANDROID_SIGNED_FILES_COUNT|The count of signed release files.
-
+| Key              | ENV                        | Usage                                                                                                                                                                          |
+| ---------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| signedFile       | ANDROID_SIGNED_FILE        | The path to the single release file that have been signed.<br />Not set if multiple release files have been signed.                                                            |
+| signedFiles      | ANDROID_SIGNED_FILES       | The paths to the release files that have been signed with this action, separated by `:`.                                                                                       |
+| signedFileX      | ANDROID_SIGNED_FILE_X      | The paths to the release files that have been signed with this action. The `X` is index number starting from 0. Example: `signedFile0, signedFile1` or `ANDROID_SIGNED_FILE_0` |
+| signedFilesCount | ANDROID_SIGNED_FILES_COUNT | The count of signed release files.                                                                                                                                             |
 
 ## BUGs & Issues
 

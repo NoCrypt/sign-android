@@ -2,7 +2,8 @@ import * as core from '@actions/core'
 import { signAabFile, signApkFile } from './signing'
 import path from 'path'
 import fs from 'fs'
-import * as io from './io-utils'
+import * as ioUtils from './io-utils'
+import * as io from '@actions/io'
 
 async function run(): Promise<void> {
   try {
@@ -26,6 +27,15 @@ async function run(): Promise<void> {
     const keyPassword = core.getInput('keyPassword')
       ? core.getInput('keyPassword')
       : process.env.ANDROID_KEY_PASSWORD
+    const appName = core.getInput('appName')
+      ? core.getInput('appName')
+      : process.env.ANDROID_APP_NAME
+    const appVersion = core.getInput('appVersion')
+      ? core.getInput('appVersion')
+      : process.env.ANDROID_APP_VERSION
+    const appPrefix = core.getInput('appPrefix')
+      ? core.getInput('appPrefix')
+      : process.env.ANDROID_APP_PREFIX
 
     if (
       !releaseDir ||
@@ -41,13 +51,13 @@ async function run(): Promise<void> {
       `Preparing to sign key @ ${releaseDir} with provided signing key`
     )
 
-    const releaseFiles = io.findReleaseFiles(releaseDir)
+    const releaseFiles = ioUtils.findReleaseFiles(releaseDir)
 
     if (releaseFiles && releaseFiles.length > 0) {
       const signingKey = path.join(releaseDir, 'signingKey.jks')
       saveSigningKey(signingKey, signingKeyBase64)
 
-      const signedReleaseFiles = await signReleaseFiles(
+      let signedReleaseFiles = await signReleaseFiles(
         releaseFiles,
         releaseDir,
         signingKey,
@@ -55,6 +65,16 @@ async function run(): Promise<void> {
         keyStorePassword,
         keyPassword
       )
+
+      if (appName || appVersion || appPrefix) {
+        console.log('Renaming signed release files...')
+        signedReleaseFiles = await renameSignedReleaseFiles(
+          signedReleaseFiles,
+          appName,
+          appVersion,
+          appPrefix
+        )
+      }
 
       setOutputVariables(signedReleaseFiles)
 
@@ -65,6 +85,43 @@ async function run(): Promise<void> {
   } catch (error) {
     handleError(error)
   }
+}
+async function renameSignedReleaseFiles(
+  signedReleaseFiles: string[],
+  name = 'app',
+  version?: string,
+  prefix?: string
+): Promise<string[]> {
+  const architectures = [
+    'arm64-v8a',
+    'armeabi-v7a',
+    'x86',
+    'x86_64',
+    'universal'
+  ]
+  const renamedFiles: string[] = []
+
+  for (const file of signedReleaseFiles) {
+    const ext = path.extname(file)
+    const archMatch = architectures.find(arch => file.includes(arch))
+    const architecture = archMatch ? archMatch : ''
+
+    let newFilename: string
+    if (signedReleaseFiles.length === 1 && !architecture) {
+      newFilename = `${prefix ? `${prefix}-` : ''}${name}${version ? `-${version}` : ''}${ext}`
+    } else {
+      newFilename = `${prefix ? `${prefix}-` : ''}${name}${version ? `-${version}` : ''}${architecture ? `-${architecture}` : ''}${ext}`
+    }
+
+    const dir = path.dirname(file)
+    const newFilePath = path.join(dir, newFilename)
+
+    await io.mv(file, newFilePath)
+    console.log(`Renamed ${file} to ${newFilePath}`)
+    renamedFiles.push(newFilePath)
+  }
+
+  return renamedFiles
 }
 
 function saveSigningKey(

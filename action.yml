@@ -23,6 +23,15 @@ inputs:
   buildToolsVersion:
     description: 'Prefered Android build tools to use'
     required: false
+  appName:
+    description: 'Prefered App Name for renaming'
+    required: false
+  appVersion:
+    description: 'Prefered App Version for renaming'
+    required: false
+  appPrefix:
+    description: 'Prefered App Prefix for renaming'
+    required: false
 runs:
   using: 'node20'
   main: 'dist/index.js'
