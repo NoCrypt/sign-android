@@ -1,229 +1,138 @@
-# Create a GitHub Action Using TypeScript
+<div align="center">
+<h1>Sign Android Release</h1>
+<p>A GitHub action to sign an APK or AAB.</p>
 
-[![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
-[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
+![Workflow](https://img.shields.io/github/actions/workflow/status/NoCrypt/sign-android-release/build.yml?branch=master&style=flat-square)
+[![License](https://img.shields.io/github/license/NoCrypt/sign-android-release?style=flat-square)](https://github.com/NoCrypt/sign-android-release/blob/master/LICENSE)
 
-Use this template to bootstrap the creation of a TypeScript action. :rocket:
+</div>
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
+---
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
-
-## Create Your Own Action
-
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
-
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
-
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
-
-## Initial Setup
-
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
-
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
-> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), this template has a `.node-version`
-> file at the root of the repository that will be used to automatically switch
-> to the correct version when you `cd` into the repository. Additionally, this
-> `.node-version` file is used by GitHub Actions in any `actions/setup-node`
-> actions.
-
-1. :hammer_and_wrench: Install the dependencies
-
-   ```bash
-   npm install
-   ```
-
-1. :building_construction: Package the TypeScript for distribution
-
-   ```bash
-   npm run bundle
-   ```
-
-1. :white_check_mark: Run the tests
-
-   ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
-   ```
-
-## Update the Action Metadata
-
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
-
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
-
-## Update the Action Code
-
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
-
-There are a few things to keep in mind when writing your action code:
-
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.ts`, you will see that the action is run in an `async` function.
-
-  ```javascript
-  import * as core from '@actions/core'
-  //...
-
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
-
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
-
-So, what are you waiting for? Go ahead and start customizing your action!
-
-1. Create a new branch
-
-   ```bash
-   git checkout -b releases/v1
-   ```
-
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
-
-   ```bash
-   npm run all
-   ```
-
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
-
-1. Commit your changes
-
-   ```bash
-   git add .
-   git commit -m "My first action is ready!"
-   ```
-
-1. Push them to your repository
-
-   ```bash
-   git push -u origin releases/v1
-   ```
-
-1. Create a pull request and get feedback on your action
-1. Merge the pull request into the `main` branch
-
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: ./
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
-```
-
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/typescript-action/actions)! :rocket:
+This action will help you sign an Android `.apk` or `.aab` (Android App Bundle) file for release.
 
 ## Usage
 
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
+```yml
+steps:
+  - uses: NoCrypt/sign-android-release@master
+    name: Sign app APK
+    id: sign_app
+    with:
+      releaseDir: app/build/outputs/apk/release
+      signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
+      keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
+      keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
+  # Upload your signed file if you want
+  - uses: actions/upload-artifact@v3
+    with:
+      name: Signed app bundle
+      path: ${{steps.sign_app.outputs.signedFile}}
+```
+
+If you have multiple files to sign:
 
 ```yaml
 steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: actions/typescript-action@v1 # Commit with the `v1` tag
+  - uses: NoCrypt/sign-android-release@master
+    id: sign_app
     with:
-      milliseconds: 1000
+      releaseDir: app/build/outputs/apk/release
+      signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
+      keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
+      keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+  - uses: jungwinter/split@v2
+    id: signed_files
+    with:
+      msg: ${{ steps.sign_app.outputs.signedFiles }}
+      separator: ':'
+
+  - name: Example Release
+    uses: "marvinpinto/action-automatic-releases@latest"
+    with:
+      repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      automatic_release_tag: "latest"
+      prerelease: true
+      title: "Release X"
+      files: |
+        ${{ steps.signed_files.outputs._0 }}
+        ${{ steps.signed_files.outputs._1 }}
+        ${{ steps.signed_files.outputs._2 }}
+        ${{ steps.signed_files.outputs._3 }}
+        ${{ steps.signed_files.outputs._4 }}
 ```
 
-## Publishing a New Release
+Or you can also do this using `signedFileX`:
 
-This project includes a helper script, [`script/release`](./script/release)
-designed to streamline the process of tagging and pushing new releases for
-GitHub Actions.
+```yaml
+steps:
+  - uses: NoCrypt/sign-android-release@master
+    id: sign_app
+    with:
+      releaseDir: app/build/outputs/apk/release
+      signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
+      keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
+      keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-GitHub Actions allows users to select a specific version of the action to use,
-based on release tags. This script simplifies this process by performing the
-following steps:
+  - name: Example Release
+    uses: "marvinpinto/action-automatic-releases@latest"
+    with:
+      repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      automatic_release_tag: "latest"
+      prerelease: true
+      title: "Release X"
+      files: |
+        ${{ steps.sign_app.outputs.signedFile0 }}
+        ${{ steps.sign_app.outputs.signedFile1 }}
+        ${{ steps.sign_app.outputs.signedFile2 }}
+        ${{ steps.sign_app.outputs.signedFile3 }}
+        ${{ steps.sign_app.outputs.signedFile4 }}
+```
 
-1. **Retrieving the latest release tag:** The script starts by fetching the most
-   recent release tag by looking at the local data available in your repository.
-1. **Prompting for a new release tag:** The user is then prompted to enter a new
-   release tag. To assist with this, the script displays the latest release tag
-   and provides a regular expression to validate the format of the new tag.
-1. **Tagging the new release:** Once a valid new tag is entered, the script tags
-   the new release.
-1. **Pushing the new tag to the remote:** Finally, the script pushes the new tag
-   to the remote repository. From here, you will need to create a new release in
-   GitHub and users can easily reference the new tag in their workflows.
+## Inputs
+
+You can set either inputs (in `with` section) or env (in `env` section).
+
+Key|ENV|Usage
+-|-|-
+releaseDir|ANDROID_RELEASE_DIR|**Required.** The relative directory path in your project where your Android release file will be located.<br />Defaults to `app/build/outputs/apk/release`.
+signingKey|ANDROID_SIGNING_KEY|**Required.** The base64 encoded signing key used to sign your app.
+keyAlias|ANDROID_KEY_ALIAS|**Required.** The alias of your signing key.
+keyStorePassword|ANDROID_KEYSTORE_PASSWORD|**Required.** The password for your signing keystore.
+keyPassword|ANDROID_KEY_PASSWORD|**Optional.** The private password for your signing key.
+buildToolsVersion|ANDROID_BUILD_TOOLS_VERSION|**Optional.** The version of Android build tools to use. Defaults to Auto Detect.
+
+You can prepare your `signingKey` by running this command:
+
+```sh
+openssl base64 < some_signing_key.jks | tr -d '\n' | tee some_signing_key.jks.base64.txt
+```
+
+Then copy the text to `Settings - Secrets - Action` in your account or organization.
+
+## Outputs
+
+Key|ENV|Usage
+-|-|-
+signedFile|ANDROID_SIGNED_FILE|The path to the single release file that have been signed.<br />Not set if multiple release files have been signed.
+signedFiles|ANDROID_SIGNED_FILES|The paths to the release files that have been signed with this action, separated by `:`.
+signedFileX|ANDROID_SIGNED_FILE_X|The paths to the release files that have been signed with this action. The `X` is index number starting from 0. Example: `signedFile0, signedFile1` or `ANDROID_SIGNED_FILE_0`
+signedFilesCount|ANDROID_SIGNED_FILES_COUNT|The count of signed release files.
+
+
+## BUGs & Issues
+
+Feel free to [open issues](https://github.com/NoCrypt/sign-android-release/issues/new).
+
+## Contributions
+
+PRs are welcome! Feel free to contribute.
+
+## LICENSE
+
+[MIT](https://github.com/NoCrypt/sign-android-release/blob/master/LICENSE)
