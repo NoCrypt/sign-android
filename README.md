@@ -2,8 +2,8 @@
 <h1>Sign Android Release</h1>
 <p>A GitHub action to sign an APK or AAB.</p>
 
-![Workflow](https://img.shields.io/github/actions/workflow/status/NoCrypt/sign-android-release/build.yml?branch=master&style=flat-square)
-[![License](https://img.shields.io/github/license/NoCrypt/sign-android-release?style=flat-square)](https://github.com/NoCrypt/sign-android-release/blob/master/LICENSE)
+![Workflow](https://img.shields.io/github/actions/workflow/status/NoCrypt/sign-android/build.yml?branch=main&style=flat-square)
+[![License](https://img.shields.io/github/license/NoCrypt/sign-android?style=flat-square)](https://github.com/NoCrypt/sign-android/blob/main/LICENSE)
 
 </div>
 
@@ -15,7 +15,7 @@ This action will help you sign an Android `.apk` or `.aab` (Android App Bundle) 
 
 ```yml
 steps:
-  - uses: NoCrypt/sign-android-release@master
+  - uses: NoCrypt/sign-android@latest
     name: Sign app APK
     id: sign_app
     with:
@@ -36,7 +36,7 @@ If you have multiple files to sign:
 
 ```yaml
 steps:
-  - uses: NoCrypt/sign-android-release@master
+  - uses: NoCrypt/sign-android@latest
     id: sign_app
     with:
       releaseDir: app/build/outputs/apk/release
@@ -70,7 +70,7 @@ Or you can also do this using `signedFileX`:
 
 ```yaml
 steps:
-  - uses: NoCrypt/sign-android-release@master
+  - uses: NoCrypt/sign-android@latest
     id: sign_app
     with:
       releaseDir: app/build/outputs/apk/release
@@ -127,7 +127,7 @@ signedFilesCount|ANDROID_SIGNED_FILES_COUNT|The count of signed release files.
 
 ## BUGs & Issues
 
-Feel free to [open issues](https://github.com/NoCrypt/sign-android-release/issues/new).
+Feel free to [open issues](https://github.com/NoCrypt/sign-android/issues/new).
 
 ## Contributions
 
@@ -135,4 +135,4 @@ PRs are welcome! Feel free to contribute.
 
 ## LICENSE
 
-[MIT](https://github.com/NoCrypt/sign-android-release/blob/master/LICENSE)
+[MIT](https://github.com/NoCrypt/sign-android/blob/main/LICENSE)
