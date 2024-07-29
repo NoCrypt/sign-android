@@ -16,7 +16,7 @@ file for release.
 
 ```yml
 steps:
-  - uses: NoCrypt/sign-android@latest
+  - uses: NoCrypt/sign-android@main 
     name: Sign app APK
     id: sign_app
     with:
@@ -37,7 +37,7 @@ If you have multiple files to sign:
 
 ```yaml
 steps:
-  - uses: NoCrypt/sign-android@latest
+  - uses: NoCrypt/sign-android@main
     id: sign_app
     with:
       releaseDir: app/build/outputs/apk/release
@@ -71,7 +71,7 @@ Or you can also do this using `signedFileX`:
 
 ```yaml
 steps:
-  - uses: NoCrypt/sign-android@latest
+  - uses: NoCrypt/sign-android@main
     id: sign_app
     with:
       releaseDir: app/build/outputs/apk/release
