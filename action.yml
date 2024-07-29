@@ -1,4 +1,4 @@
-name: 'Sign And Align Android Releases'
+name: 'Sign Android Releases Apk'
 description: 'An action to sign an Android release APK or AAB'
 author: 'NoCrypt'
 branding:
