@@ -2,7 +2,7 @@
 <h1>Sign Android Release</h1>
 <p>A GitHub action to sign an APK or AAB.</p>
 
-![Workflow](https://img.shields.io/github/actions/workflow/status/NoCrypt/sign-android/build.yml?branch=main&style=flat-square)
+[![Test](https://github.com/NoCrypt/sign-android/actions/workflows/test.yml/badge.svg)](https://github.com/NoCrypt/sign-android/actions/workflows/test.yml)
 [![License](https://img.shields.io/github/license/NoCrypt/sign-android?style=flat-square)](https://github.com/NoCrypt/sign-android/blob/main/LICENSE)
 
 </div>
