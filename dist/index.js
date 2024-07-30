@@ -26235,14 +26235,14 @@ async function run() {
         const keyPassword = core.getInput('keyPassword')
             ? core.getInput('keyPassword')
             : process.env.ANDROID_KEY_PASSWORD;
-        const appName = core.getInput('name')
-            ? core.getInput('name')
+        const appName = core.getInput('appName')
+            ? core.getInput('appName')
             : process.env.ANDROID_APP_NAME;
-        const appVersion = core.getInput('version')
-            ? core.getInput('version')
+        const appVersion = core.getInput('appVersion')
+            ? core.getInput('appVersion')
             : process.env.ANDROID_APP_VERSION;
-        const appPrefix = core.getInput('prefix')
-            ? core.getInput('prefix')
+        const appPrefix = core.getInput('appPrefix')
+            ? core.getInput('appPrefix')
             : process.env.ANDROID_APP_PREFIX;
         if (!releaseDir ||
             !signingKeyBase64 ||

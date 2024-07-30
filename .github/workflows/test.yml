@@ -61,6 +61,6 @@ jobs:
           keyAlias: test_key
           keyStorePassword: android
           keyPassword: android
-          name: name
-          version: 1.2.3
-          prefix: pre
+          appName: name
+          appVersion: 1.2.3
+          appPrefix: pre
