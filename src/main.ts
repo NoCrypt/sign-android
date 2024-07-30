@@ -117,10 +117,10 @@ async function renameSignedReleaseFiles(
     let newFilePath = path.join(dir, newFilename)
 
     // check if file with newFilePath name already exist
-    let duplicateIndex = 1;
+    let duplicateIndex = 1
     while (fs.existsSync(newFilePath)) {
       console.error('File already exists:', newFilePath)
-      newFilePath = `${path.join(dir,path.basename(newFilePath))}-${duplicateIndex++}${ext}`
+      newFilePath = `${path.join(dir, path.basename(newFilePath))}-${duplicateIndex++}${ext}`
     }
 
     await io.mv(file, newFilePath)

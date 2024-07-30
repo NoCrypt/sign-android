@@ -12,15 +12,16 @@ export async function signApkFile(
   keyPassword?: string
 ): Promise<string> {
   try {
-    core.debug('Zipaligning APK file')
+    console.log('::group::Zipaligning APK file')
 
     const buildToolsPath = await getBuildToolsPath()
     const zipAlign = path.join(buildToolsPath, 'zipalign')
     core.debug(`Found 'zipalign' @ ${zipAlign}`)
 
     const alignedApkFile = await alignApkFile(apkFile, zipAlign)
+    console.log('::endgroup::')
 
-    core.debug('Signing APK file')
+    console.log('::group::Signing APK file')
 
     const apkSigner = path.join(buildToolsPath, 'apksigner')
     core.debug(`Found 'apksigner' @ ${apkSigner}`)
@@ -35,12 +36,15 @@ export async function signApkFile(
       apkFile,
       '-signed.apk'
     )
+    console.log('::endgroup::')
 
-    core.debug('Verifying Signed APK')
+    console.log('::group::Verifying Signed APK')
     await verifySignedFile(apkSigner, signedApkFile)
+    console.log('::endgroup::')
 
     return signedApkFile
   } catch (error) {
+    console.log('::endgroup::')
     core.setFailed(`Failed to sign APK file: ${(error as Error).message}`)
     throw error
   }
@@ -54,7 +58,7 @@ export async function signAabFile(
   keyPassword?: string
 ): Promise<string> {
   try {
-    core.debug('Signing AAB file')
+    console.log('::group::Signing AAB file')
 
     const jarSignerPath = await io.which('jarsigner', true)
     core.debug(`Found 'jarsigner' @ ${jarSignerPath}`)
@@ -70,9 +74,11 @@ export async function signAabFile(
     ]
 
     await exec.exec(`"${jarSignerPath}"`, args)
+    console.log('::endgroup::')
 
     return aabFile
   } catch (error) {
+    console.log('::endgroup::')
     core.setFailed(`Failed to sign AAB file: ${(error as Error).message}`)
     throw error
   }
@@ -103,12 +109,14 @@ async function getBuildToolsPath(): Promise<string> {
           }
         }
       }
-
+      console.log('::group::Detecting Android build tools version...')
       await exec.exec('ls', [buildToolsDir], options)
       const versions = buildToolsVersion.trim().split('\n')
       buildToolsVersion = versions[versions.length - 1]
       console.log('Found! Build tools version', buildToolsVersion)
+      console.log('::endgroup::')
     } catch (error) {
+      console.log('::endgroup::')
       throw new Error('Failed to detect Android build tools version.')
     }
   }

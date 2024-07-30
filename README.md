@@ -16,7 +16,7 @@ file for release.
 
 ```yml
 steps:
-  - uses: NoCrypt/sign-android@main 
+  - uses: NoCrypt/sign-android@main
     name: Sign app APK
     id: sign_app
     with:
@@ -107,9 +107,9 @@ You can set either inputs (in `with` section) or env (in `env` section).
 | keyStorePassword  | ANDROID_KEYSTORE_PASSWORD   | **Required.** The password for your signing keystore.                                                                                                        |
 | keyPassword       | ANDROID_KEY_PASSWORD        | **Optional.** The private password for your signing key.                                                                                                     |
 | buildToolsVersion | ANDROID_BUILD_TOOLS_VERSION | **Optional.** The version of Android build tools to use. Defaults to Auto Detect.                                                                            |
-| appName| ANDROID_APP_NAME | **Optional.** Prefered App Name for renaming. Defaults to `app`. Example: `name` will results android-`name`-1.2.3.apk                                                                            |
-| appVersion | ANDROID_APP_VERSION | **Optional.** Prefered App Version for renaming. Example: `1.2.3` will results android-name-`1.2.3`.apk                                                                           |
-| appPrefix | ANDROID_APP_PREFIX | **Optional.** Prefered App Prefix for renaming. Example: `android` will results `android`-name-1.2.3.apk                                                                           |
+| appName           | ANDROID_APP_NAME            | **Optional.** Prefered App Name for renaming. Defaults to `app`. Example: `name` will results android-`name`-1.2.3.apk                                       |
+| appVersion        | ANDROID_APP_VERSION         | **Optional.** Prefered App Version for renaming. Example: `1.2.3` will results android-name-`1.2.3`.apk                                                      |
+| appPrefix         | ANDROID_APP_PREFIX          | **Optional.** Prefered App Prefix for renaming. Example: `android` will results `android`-name-1.2.3.apk                                                     |
 
 You can prepare your `signingKey` by running this command:
 

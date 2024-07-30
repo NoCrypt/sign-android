@@ -26293,7 +26293,13 @@ async function renameSignedReleaseFiles(signedReleaseFiles, name = 'app', versio
             newFilename = `${prefix ? `${prefix}-` : ''}${name}${version ? `-${version}` : ''}${architecture ? `-${architecture}` : ''}${ext}`;
         }
         const dir = path_1.default.dirname(file);
-        const newFilePath = path_1.default.join(dir, newFilename);
+        let newFilePath = path_1.default.join(dir, newFilename);
+        // check if file with newFilePath name already exist
+        let duplicateIndex = 1;
+        while (fs_1.default.existsSync(newFilePath)) {
+            console.error('File already exists:', newFilePath);
+            newFilePath = `${path_1.default.join(dir, path_1.default.basename(newFilePath))}-${duplicateIndex++}${ext}`;
+        }
         await io.mv(file, newFilePath);
         console.log(`Renamed ${file} to ${newFilePath}`);
         renamedFiles.push(newFilePath);
@@ -26315,6 +26321,7 @@ async function signReleaseFiles(releaseFiles, releaseDir, signingKey, alias, key
         core.debug(`Found release to sign: ${releaseFile.name}`);
         const releaseFilePath = path_1.default.join(releaseDir, releaseFile.name);
         let signedReleaseFile = '';
+        console.log('::group::Working on', releaseFile.name, '...');
         try {
             if (releaseFile.name.endsWith('.apk')) {
                 signedReleaseFile = await (0, signing_1.signApkFile)(releaseFilePath, signingKey, alias, keyStorePassword, keyPassword);
@@ -26328,6 +26335,9 @@ async function signReleaseFiles(releaseFiles, releaseDir, signingKey, alias, key
         }
         catch (error) {
             throw new Error(`Failed to sign file ${releaseFile.name}: ${error.message}`);
+        }
+        finally {
+            console.log('::endgroup::');
         }
         core.exportVariable(`ANDROID_SIGNED_FILE_${index}`, signedReleaseFile);
         core.setOutput(`signedFile${index}`, signedReleaseFile);
@@ -26398,27 +26408,31 @@ const path = __importStar(__nccwpck_require__(1017));
 const fs = __importStar(__nccwpck_require__(7147));
 async function signApkFile(apkFile, signingKeyFile, alias, keyStorePassword, keyPassword) {
     try {
-        core.debug('Zipaligning APK file');
+        console.log('::group::Zipaligning APK file');
         const buildToolsPath = await getBuildToolsPath();
         const zipAlign = path.join(buildToolsPath, 'zipalign');
         core.debug(`Found 'zipalign' @ ${zipAlign}`);
         const alignedApkFile = await alignApkFile(apkFile, zipAlign);
-        core.debug('Signing APK file');
+        console.log('::endgroup::');
+        console.log('::group::Signing APK file');
         const apkSigner = path.join(buildToolsPath, 'apksigner');
         core.debug(`Found 'apksigner' @ ${apkSigner}`);
         const signedApkFile = await signFile(apkSigner, alignedApkFile, signingKeyFile, alias, keyStorePassword, keyPassword, apkFile, '-signed.apk');
-        core.debug('Verifying Signed APK');
+        console.log('::endgroup::');
+        console.log('::group::Verifying Signed APK');
         await verifySignedFile(apkSigner, signedApkFile);
+        console.log('::endgroup::');
         return signedApkFile;
     }
     catch (error) {
+        console.log('::endgroup::');
         core.setFailed(`Failed to sign APK file: ${error.message}`);
         throw error;
     }
 }
 async function signAabFile(aabFile, signingKeyFile, alias, keyStorePassword, keyPassword) {
     try {
-        core.debug('Signing AAB file');
+        console.log('::group::Signing AAB file');
         const jarSignerPath = await io.which('jarsigner', true);
         core.debug(`Found 'jarsigner' @ ${jarSignerPath}`);
         const args = [
@@ -26431,9 +26445,11 @@ async function signAabFile(aabFile, signingKeyFile, alias, keyStorePassword, key
             alias
         ];
         await exec.exec(`"${jarSignerPath}"`, args);
+        console.log('::endgroup::');
         return aabFile;
     }
     catch (error) {
+        console.log('::endgroup::');
         core.setFailed(`Failed to sign AAB file: ${error.message}`);
         throw error;
     }
@@ -26456,12 +26472,15 @@ async function getBuildToolsPath() {
                     }
                 }
             };
+            console.log('::group::Detecting Android build tools version...');
             await exec.exec('ls', [buildToolsDir], options);
             const versions = buildToolsVersion.trim().split('\n');
             buildToolsVersion = versions[versions.length - 1];
             console.log('Found! Build tools version', buildToolsVersion);
+            console.log('::endgroup::');
         }
         catch (error) {
+            console.log('::endgroup::');
             throw new Error('Failed to detect Android build tools version.');
         }
     }
