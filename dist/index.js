@@ -26321,7 +26321,7 @@ async function signReleaseFiles(releaseFiles, releaseDir, signingKey, alias, key
         core.debug(`Found release to sign: ${releaseFile.name}`);
         const releaseFilePath = path_1.default.join(releaseDir, releaseFile.name);
         let signedReleaseFile = '';
-        console.log('::group::Working on', releaseFile.name, '...');
+        console.log('Working on', releaseFile.name, '...');
         try {
             if (releaseFile.name.endsWith('.apk')) {
                 signedReleaseFile = await (0, signing_1.signApkFile)(releaseFilePath, signingKey, alias, keyStorePassword, keyPassword);
@@ -26335,9 +26335,6 @@ async function signReleaseFiles(releaseFiles, releaseDir, signingKey, alias, key
         }
         catch (error) {
             throw new Error(`Failed to sign file ${releaseFile.name}: ${error.message}`);
-        }
-        finally {
-            console.log('::endgroup::');
         }
         core.exportVariable(`ANDROID_SIGNED_FILE_${index}`, signedReleaseFile);
         core.setOutput(`signedFile${index}`, signedReleaseFile);
@@ -26472,15 +26469,12 @@ async function getBuildToolsPath() {
                     }
                 }
             };
-            console.log('::group::Detecting Android build tools version...');
             await exec.exec('ls', [buildToolsDir], options);
             const versions = buildToolsVersion.trim().split('\n');
             buildToolsVersion = versions[versions.length - 1];
             console.log('Found! Build tools version', buildToolsVersion);
-            console.log('::endgroup::');
         }
         catch (error) {
-            console.log('::endgroup::');
             throw new Error('Failed to detect Android build tools version.');
         }
     }

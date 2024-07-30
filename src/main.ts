@@ -158,7 +158,7 @@ async function signReleaseFiles(
     const releaseFilePath = path.join(releaseDir, releaseFile.name)
     let signedReleaseFile = ''
 
-    console.log('::group::Working on', releaseFile.name, '...')
+    console.log('Working on', releaseFile.name, '...')
 
     try {
       if (releaseFile.name.endsWith('.apk')) {
@@ -184,8 +184,6 @@ async function signReleaseFiles(
       throw new Error(
         `Failed to sign file ${releaseFile.name}: ${error.message}`
       )
-    } finally {
-      console.log('::endgroup::')
     }
 
     core.exportVariable(`ANDROID_SIGNED_FILE_${index}`, signedReleaseFile)

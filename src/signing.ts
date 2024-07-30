@@ -109,14 +109,11 @@ async function getBuildToolsPath(): Promise<string> {
           }
         }
       }
-      console.log('::group::Detecting Android build tools version...')
       await exec.exec('ls', [buildToolsDir], options)
       const versions = buildToolsVersion.trim().split('\n')
       buildToolsVersion = versions[versions.length - 1]
       console.log('Found! Build tools version', buildToolsVersion)
-      console.log('::endgroup::')
     } catch (error) {
-      console.log('::endgroup::')
       throw new Error('Failed to detect Android build tools version.')
     }
   }
