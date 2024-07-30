@@ -26298,7 +26298,7 @@ async function renameSignedReleaseFiles(signedReleaseFiles, name = 'app', versio
         let duplicateIndex = 1;
         while (fs_1.default.existsSync(newFilePath)) {
             console.error('File already exists:', newFilePath);
-            newFilePath = `${path_1.default.join(dir, path_1.default.basename(newFilePath))}-${duplicateIndex++}${ext}`;
+            newFilePath = `${path_1.default.join(dir, path_1.default.parse(newFilePath).name)}-${duplicateIndex++}${ext}`;
         }
         await io.mv(file, newFilePath);
         console.log(`Renamed ${file} to ${newFilePath}`);
