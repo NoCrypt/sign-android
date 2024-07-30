@@ -114,7 +114,14 @@ async function renameSignedReleaseFiles(
     }
 
     const dir = path.dirname(file)
-    const newFilePath = path.join(dir, newFilename)
+    let newFilePath = path.join(dir, newFilename)
+
+    // check if file with newFilePath name already exist
+    let duplicateIndex = 1;
+    while (fs.existsSync(newFilePath)) {
+      console.error('File already exists:', newFilePath)
+      newFilePath = `${path.join(dir,path.basename(newFilePath))}-${duplicateIndex++}${ext}`
+    }
 
     await io.mv(file, newFilePath)
     console.log(`Renamed ${file} to ${newFilePath}`)
@@ -151,6 +158,8 @@ async function signReleaseFiles(
     const releaseFilePath = path.join(releaseDir, releaseFile.name)
     let signedReleaseFile = ''
 
+    console.log('::group::Working on', releaseFile.name, '...')
+
     try {
       if (releaseFile.name.endsWith('.apk')) {
         signedReleaseFile = await signApkFile(
@@ -175,6 +184,8 @@ async function signReleaseFiles(
       throw new Error(
         `Failed to sign file ${releaseFile.name}: ${error.message}`
       )
+    } finally {
+      console.log('::endgroup::')
     }
 
     core.exportVariable(`ANDROID_SIGNED_FILE_${index}`, signedReleaseFile)
